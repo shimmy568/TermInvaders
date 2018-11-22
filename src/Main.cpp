@@ -32,14 +32,7 @@ int main(int argc, char **argv) {
 
   term = ts::Term::Create(STDOUT_FILENO);
 
-
-  // term->SetCursorCol(10);
-  // term->SetCursorRow(10);
-  // term->PutString("hello world");
-  // term->ClearTerm();
-  // usleep(999999999999999);  
-
-  //term->SetCursorVisible(false);
+  term->SetCursorVisible(false);
 
   KeyboardManager keyboardManager;
   std::shared_ptr<KeyboardManager> keyboardManagerPointer(&keyboardManager);
@@ -49,8 +42,8 @@ int main(int argc, char **argv) {
 
   Player p(term, keyboardManagerPointer, entityManagerPointer);
 
-  p.SetX(10);
-  p.SetY(10);
+  p.SetX(term->GetWidth() / 2);
+  p.SetY(term->GetHeight() - 5);
 
   while (running) {
     term->ClearTerm();

@@ -5,6 +5,10 @@
 #include <algorithm>
 #include <memory>
 
+const double ACCELERATION = 0.5;
+const double DECELERATION = ACCELERATION * 0.05;
+const double MAX_SPEED = 3;
+
 Player::Player(::std::shared_ptr<ts::Term> term,
                ::std::shared_ptr<KeyboardManager> keyboardManager,
                ::std::shared_ptr<EntityManager> entityManager)
@@ -42,39 +46,61 @@ void Player::Draw() {
 }
 
 void Player::Update() {
+
   x_pos += deltaX;
   y_pos += deltaY;
+  
   if (deltaX < 0) {
+    deltaX += DECELERATION;
+    if(deltaX > 0){
+      deltaX = 0;
+    }
   } else {
+    deltaX -= DECELERATION;
+    if(deltaX < 0){
+      deltaX = 0;
+    }
+  }
+
+  if (deltaY < 0) {
+    deltaY += DECELERATION;
+    if(deltaY > 0){
+      deltaY = 0;
+    }
+  } else {
+    deltaY -= DECELERATION;
+    if(deltaY < 0){
+      deltaY = 0;
+    }
   }
 }
 
-float Player::GetX() { return x_pos; }
+double Player::GetX() { return x_pos; }
 
-float Player::GetY() { return y_pos; }
+double Player::GetY() { return y_pos; }
 
 void Player::SetX(uint32_t x) { x_pos = x; }
 
 void Player::SetY(uint32_t y) { y_pos = y; }
 
-void Player::AddToDelta(float* delta, float add) {
+void Player::AddToDelta(double* delta, double add) {
   *delta += add;
-  *delta = std::clamp(*delta, (float)-3, (float)-3.0);
+  *delta = std::clamp(*delta, (double)-MAX_SPEED, (double)MAX_SPEED);
 }
 
 void Player::KeyPressed(KeyCode code) {
   switch (code) {
     case KeyCode::UP:
-      AddToDelta(&y_pos, -0.2);
+      AddToDelta(&deltaY, -ACCELERATION);
       break;
     case KeyCode::DOWN:
-      AddToDelta(&y_pos, 0.2);
+      AddToDelta(&deltaY, ACCELERATION);
       break;
     case KeyCode::LEFT:
-      AddToDelta(&x_pos, -0.2);
+      AddToDelta(&deltaX, -ACCELERATION);
       break;
     case KeyCode::RIGHT:
-      AddToDelta(&x_pos, 0.2);
+      AddToDelta(&deltaX, ACCELERATION);
       break;
     case KeyCode::SPACE:
       FireBullet();
@@ -83,6 +109,6 @@ void Player::KeyPressed(KeyCode code) {
 }
 
 void Player::FireBullet() {
-  std::shared_ptr<Drawable> bullet(new Bullet(term, x_pos + 2, y_pos - 1));
+  std::shared_ptr<Drawable> bullet(new Bullet(term, entityManager, x_pos + 2, y_pos - 1));
   entityManager->AddEntity(bullet);
 }
