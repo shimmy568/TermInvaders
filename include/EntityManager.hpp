@@ -15,6 +15,7 @@ class EntityManager {
   
   void AddEntity(std::shared_ptr<Drawable> entity);
   void RemoveEntity(std::shared_ptr<Drawable> entityToRemove);
+  void RemoveEntity(Drawable* entityToRemove);
 
   void DrawEntities();
   void UpdateEntities();

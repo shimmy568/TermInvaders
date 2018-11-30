@@ -14,6 +14,6 @@ void Bullet::Draw() {
 void Bullet::Update() {
   y_pos -= 1;
   if (y_pos < 0) {
-    entityManager->RemoveEntity(std::shared_ptr<Drawable>(this));
+    entityManager->RemoveEntity(this);
   }
 }

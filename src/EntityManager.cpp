@@ -12,6 +12,16 @@ void EntityManager::RemoveEntity(std::shared_ptr<Drawable> entityToRemove) {
   entities.remove(entityToRemove);
 }
 
+void EntityManager::RemoveEntity(Drawable* entityToRemove) {
+  std::lock_guard<std::mutex> lock(listMutex);
+  for(auto it = entities.begin(); it != entities.end(); it++){
+    if(it->get() == entityToRemove){
+      entities.erase(it);
+      break;
+    }
+  }
+}
+
 void EntityManager::DrawEntities() {
 
   // Copy the list to prevent the modifications from the draws to collide with the loop
@@ -28,7 +38,8 @@ void EntityManager::UpdateEntities() {
 
   // Copy the list to prevent the modifications from the updates to with the readscollide with the loop
   listMutex.lock();
-  std::list<std::shared_ptr<Drawable>> list = entities;
+  std::list<std::shared_ptr<Drawable>> list;
+  list.assign(entities.begin(), entities.end());
   listMutex.unlock();
 
   for (auto a : list) {
