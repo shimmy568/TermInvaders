@@ -3,13 +3,15 @@
 
 #include <signal.h>
 #include <stdio.h>
+#include <Enemy.hpp>
 #include <KeyboardManager.hpp>
 #include <Player.hpp>
 #include <Term.hpp>
 #include <iostream>
 #include <memory>
-#include <thread>
 #include <string>
+#include <thread>
+#include <chrono>
 
 ::std::shared_ptr<ts::Term> term;
 
@@ -21,7 +23,6 @@ void my_handler(int s) {
 }
 
 int main(int argc, char **argv) {
-
   struct sigaction sigIntHandler;
 
   sigIntHandler.sa_handler = my_handler;
@@ -42,16 +43,26 @@ int main(int argc, char **argv) {
 
   Player p(term, keyboardManagerPointer, entityManagerPointer);
 
+  Enemy test(term, entityManagerPointer, 10, 10);
+  std::shared_ptr<Drawable> testPtr(&test);
+  entityManager.AddEntity(testPtr);
+
   p.SetX(term->GetWidth() / 2);
   p.SetY(term->GetHeight() - 5);
 
   while (running) {
+    auto start = std::chrono::high_resolution_clock::now();
     term->ClearTerm();
 
     entityManager.UpdateEntities();
     entityManager.DrawEntities();
 
-    usleep(16666);
+    // Sleep for an amount of time that makes the current loop take 1/60th of a second
+    auto delta = std::chrono::high_resolution_clock::now() - start;
+    auto value = std::chrono::duration_cast<std::chrono::microseconds>(delta).count();
+    if(16666 - value > 0){
+      usleep(16666 - value > 0);
+    }
   }
 
   return 0;

@@ -1,4 +1,5 @@
 #include <EntityManager.hpp>
+#include <Collideable.hpp>
 
 EntityManager::EntityManager() {}
 

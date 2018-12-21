@@ -8,6 +8,7 @@
 const double ACCELERATION = 0.5;
 const double DECELERATION = ACCELERATION * 0.05;
 const double MAX_SPEED = 3;
+const int coolDown = 100;
 
 Player::Player(::std::shared_ptr<ts::Term> term,
                ::std::shared_ptr<KeyboardManager> keyboardManager,
@@ -111,4 +112,6 @@ void Player::KeyPressed(KeyCode code) {
 void Player::FireBullet() {
   std::shared_ptr<Drawable> bullet(new Bullet(term, entityManager, x_pos + 2, y_pos - 1));
   entityManager->AddEntity(bullet);
+  auto a = system::time
+  lastBulletFired = std::chrono::duration_cast<std::chrono::milliseconds>();
 }

@@ -6,6 +6,7 @@
 #include <KeyboardListener.hpp>
 #include <EntityManager.hpp>
 #include <Term.hpp>
+#include <chrono>
 
 class Player : public Drawable, public KeyboardListener {
   double x_pos, y_pos;
@@ -14,6 +15,7 @@ class Player : public Drawable, public KeyboardListener {
 
   ::std::shared_ptr<ts::Term> term;
   std::shared_ptr<EntityManager> entityManager;
+  std::chrono::duration<std::chrono::microseconds> lastBulletFired;
 
   void AddToDelta(double* delta, double add);
 

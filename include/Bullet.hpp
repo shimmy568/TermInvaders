@@ -6,7 +6,7 @@
 
 #include <memory>
 
-class Bullet : public Drawable {
+class Bullet : public Drawable, Collideable {
     float x_pos;
     float y_pos;
 
@@ -15,5 +15,9 @@ class Bullet : public Drawable {
  public:
   void Draw();
   void Update();
+  int getX();
+  int getY();
+  int getWidth();
+  int getHeight();
   Bullet(std::shared_ptr<ts::Term> term, std::shared_ptr<EntityManager> entityManager, float x, float y);
 };
